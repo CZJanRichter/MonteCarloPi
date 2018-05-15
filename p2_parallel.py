@@ -6,6 +6,7 @@ Created on 15. 5. 2018
 @author: JanRichter
 '''
 
+from __future__ import division
 import math
 import random
 import threading

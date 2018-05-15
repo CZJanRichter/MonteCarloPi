@@ -6,9 +6,11 @@ Created on 14. 3. 2018
 @author: JanRichter
 '''
 
+from __future__ import division
 import math
 import random
 import timeit
+
 
 class Point:
     '''
