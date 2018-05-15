@@ -60,7 +60,7 @@ class MonteCarloPi:
     
 # --------------------------------------------------------------------------------------------------------------------------   
 start = timeit.default_timer()
-generator = MonteCarloPi(10000000)
+generator = MonteCarloPi(1000000)
 stop = timeit.default_timer()
 print "It took", ; print round(stop - start, 4), ; print "seconds to init the MonteCarloPi class."
 
