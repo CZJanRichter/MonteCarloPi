@@ -8,6 +8,7 @@ Created on 15. 5. 2018
 
 from __future__ import division
 import math
+import multiprocessing
 import random
 import threading
 import timeit
@@ -35,6 +36,7 @@ class MonteCarloPi:
     '''
     def __init__(self, pointsAmount):
         self.pointsAmount = pointsAmount
+        self.pointsPerThread = pointsAmount
         self.pointsInCircle = []
         self.pointsOutsideOfCircle = []
         self.threads = []
@@ -46,7 +48,7 @@ class MonteCarloPi:
         return 4 * (len(self.pointsInCircle) / self.pointsAmount)
 
     def generatePoints(self):
-        for _ in range(0, 250000):
+        for _ in range(0, self.pointsPerThread):
             x = random.uniform(0,1)
             y = random.uniform(0,1)
             inCircle = self.isPointInsideCircle(x, y)
@@ -64,15 +66,19 @@ class MonteCarloPi:
         '''
         threadAmount: int
         '''
+        self.pointsPerThread = int(self.pointsAmount / threadAmount)
         for _ in range(0, threadAmount):
             newThread = threading.Thread(target=self.generatePoints)
             self.threads.append(newThread)
         for thread in self.threads:
             thread.start()
         print "Created thread amount:", ; print len(self.threads)
-        print "Active thread amount:", ; print threading.active_count()
+        print "Active Python thread amount:", ; print threading.active_count()
         for thread in self.threads:
             thread.join()
+        if ((len(self.pointsInCircle)+len(self.pointsOutsideOfCircle)) < self.pointsAmount):
+            self.pointsPerThread = self.pointsAmount-len(self.pointsInCircle)-len(self.pointsOutsideOfCircle)
+            self.generatePoints()
     
 # --------------------------------------------------------------------------------------------------------------------------   
 start = timeit.default_timer()
@@ -81,7 +87,7 @@ stop = timeit.default_timer()
 print "It took", ; print round(stop - start, 4), ; print "seconds to init the MonteCarloPi class."
 
 start = timeit.default_timer()
-generator.runThreadsToGeneratePoints(4)
+generator.runThreadsToGeneratePoints(multiprocessing.cpu_count())
 stop = timeit.default_timer()
 print "It took", ; print round(stop - start, 4), ; print "seconds to generate", ; print generator.pointsAmount, ; print "points and evaluate if they're in the circle."
 
