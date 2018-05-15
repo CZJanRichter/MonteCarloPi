@@ -6,6 +6,7 @@ Created on 15. 5. 2018
 @author: JanRichter
 '''
 
+from __future__ import division
 import math
 import random
 import threading
@@ -45,7 +46,7 @@ class MonteCarloPi:
         return 4 * (len(self.pointsInCircle) / self.pointsAmount)
 
     def generatePoints(self):
-        for _ in range(0, 2500000):
+        for _ in range(0, 250000):
             x = random.uniform(0,1)
             y = random.uniform(0,1)
             inCircle = self.isPointInsideCircle(x, y)
@@ -75,7 +76,7 @@ class MonteCarloPi:
     
 # --------------------------------------------------------------------------------------------------------------------------   
 start = timeit.default_timer()
-generator = MonteCarloPi(10000000)
+generator = MonteCarloPi(1000000)
 stop = timeit.default_timer()
 print "It took", ; print round(stop - start, 4), ; print "seconds to init the MonteCarloPi class."
 
